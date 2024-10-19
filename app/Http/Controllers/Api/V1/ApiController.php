@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Traits\ApiRespones;
 use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ApiController extends Controller
 {
     use ApiRespones;
+    use AuthorizesRequests;
+
+    protected $policyClass;
 
     public function include(string $relationship): bool
     {
@@ -20,5 +24,10 @@ class ApiController extends Controller
         $includeValues = explode(',', strtolower($param));
 
         return in_array(strtolower($relationship), $includeValues);
+    }
+
+    public function isAble($ability, $targetModel)
+    {
+        return $this->authorize($ability, [$targetModel, $this->policyClass]);
     }
 }
