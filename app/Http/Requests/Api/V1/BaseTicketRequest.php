@@ -10,7 +10,7 @@ class BaseTicketRequest extends FormRequest
     {
         $attributesMap = [
             'data.attributes.title' => 'title',
-            'data.attributes.description' => 'descrtiption',
+            'data.attributes.description' => 'description',
             'data.attributes.status' => 'status',
             'data.attributes.createdAt' => 'created_at',
             'data.attributes.updatedAt' => 'updated_at',
