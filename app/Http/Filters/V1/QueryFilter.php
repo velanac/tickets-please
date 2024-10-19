@@ -52,7 +52,7 @@ abstract class QueryFilter
                 $sortAttribute = substr($sortAttribute, 1);
             }
 
-            if (!in_array($sortAttribute, $this->sortable) && array_key_exists($sortAttribute, $this->sortable)) {
+            if (!in_array($sortAttribute, $this->sortable) && !array_key_exists($sortAttribute, $this->sortable)) {
                 continue;
             }
 
