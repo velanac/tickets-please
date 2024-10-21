@@ -28,67 +28,49 @@ class TicketController extends ApiController
     public function store(StoreTicketRequest $request)
     {
 
-        if ($this->isAble('store', Ticket::class)) {
-            return new TicketResource(Ticket::create($request->mappedAttributes()));
-        };
+        $this->isAble('store', Ticket::class);
 
-        return $this->error('You are not authorized to create that resource', 403);
+        return new TicketResource(Ticket::create($request->mappedAttributes()));
     }
     /**
      * Display the specified resource.
      */
     public function show($ticket_id)
     {
-        try {
-            $ticket = Ticket::findOrFail($ticket_id);
+        $ticket = Ticket::findOrFail($ticket_id);
 
-            if ($this->include('author')) {
-                return  new TicketResource($ticket->load('user'));
-            }
-
-            return new TicketResource($ticket);
-        } catch (ModelNotFoundException $ex) {
-            return $this->error('Ticket cannot be found.', 404);
+        if ($this->include('author')) {
+            return  new TicketResource($ticket->load('user'));
         }
+
+        return new TicketResource($ticket);
     }
     /**
      * Update the specified resource in storage.
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
-        try {
-            $ticket = Ticket::findOrFail($ticket->id);
 
-            if ($this->isAble('update', $ticket)) {
-                $ticket->update($request->mappedAttributes());
+        $ticket = Ticket::findOrFail($ticket->id);
 
-                return new TicketResource($ticket);
-            };
+        $this->isAble('update', $ticket);
 
+        $ticket->update($request->mappedAttributes());
 
-            return $this->error('You are not authorized to update that resource', 403);
-        } catch (ModelNotFoundException $th) {
-            return $this->error('Ticket cannot be found.', 404);
-        }
+        return new TicketResource($ticket);
     }
     /**
      * Replace the specified resource in storage.
      */
     public function replace(ReplaceTicketRequest $request, $ticket_id)
     {
-        try {
-            $ticket = Ticket::findOrFail($ticket_id);
+        $ticket = Ticket::findOrFail($ticket_id);
 
-            if ($this->isAble('replace', $ticket)) {
-                $ticket->update($request->mappedAttributes());
+        $this->isAble('replace', $ticket);
 
-                return new TicketResource($ticket);
-            };
+        $ticket->update($request->mappedAttributes());
 
-            return $this->error('You are not authorized to update that resource', 403);
-        } catch (ModelNotFoundException $th) {
-            return $this->error('Ticket cannot be found.', 404);
-        }
+        return new TicketResource($ticket);
     }
     /**
      * Remove the specified resource from storage.
